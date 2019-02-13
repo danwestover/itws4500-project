@@ -1,7 +1,12 @@
-# Itws4500project
+# ITWS4500-project
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.0.
 
+A live version of this project can be accessed at [https://itws4500-project.herokuapp.com/](https://itws4500-project.herokuapp.com/) and is automatically updated upon a commit to the master branch.
+
+
+
+# Angular Generated README:
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
