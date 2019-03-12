@@ -5,19 +5,17 @@ const app = express();
 var session = require('express-session');
 var CASAuthentication = require('cas-authentication');
 
-app.use( session({
+app.use(session({
   secret            : 'super secret key',
   resave            : false,
   saveUninitialized : true
 }));
 
+
 // Create a new instance of CASAuthentication.
 var cas = new CASAuthentication({
   cas_url     : 'https://cas-auth.rpi.edu/cas',
-  service_url : 'http://localhost:8080',
-  port: '443',
-  cas_version : '3.0',
-  session_info: 'session_inf',
+  service_url : 'http://localhost:8080'
 });
 
 // Unauthenticated clients will be redirected to the CAS login and then back to
@@ -37,7 +35,7 @@ app.get( '/api', cas.block, function ( req, res ) {
 app.get( '/api/user', cas.block, function ( req, res ) {
   console.log({cas_info: req.session});
   res.json( { cas_user: req.session[ cas.session_name ],
-              cas_session: req.session[ cas.session_inf ] 
+              // cas_session: req.session[ cas.session_inf ] 
           } );
 });
 
@@ -48,7 +46,8 @@ app.get( '/authenticate', cas.bounce, function(req, res) {
   // console.log('--------------');
   // console.log(res);
   // console.log('--------------');
-  res.send('<html><body>xx</body></html>');
+  // res.send('<html><body>xx</body></html>');
+  res.redirect('/api/user');
 });
 
 // This route will de-authenticate the client with the Express server and then
@@ -56,11 +55,14 @@ app.get( '/authenticate', cas.bounce, function(req, res) {
 app.get( '/logout', cas.logout );
 
 // Serve only the static files form the dist directory
-app.use(express.static(__dirname + '/dist/itws4500project'));
+// app.use(express.static(__dirname + '/dist/itws4500project'));
 
-app.get('/*', function (req, res) {
+// app.get('/*', function (req, res) {
+    // res.sendFile(path.join(__dirname + '/dist/itws4500project/index.html'));
+// });
 
-    res.sendFile(path.join(__dirname + '/dist/itws4500project/index.html'));
+app.get('/', function(req,res) {
+  res.send("<a href=/authenticate>Click here to login</a>");
 });
 
 // Start the app by listening on the default Heroku port
