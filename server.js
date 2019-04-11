@@ -15,12 +15,15 @@ app.use(session({
   saveUninitialized : true
 }));
 
-
 // Create a new instance of CASAuthentication.
 var cas = new CASAuthentication({
   cas_url     : 'https://cas-auth.rpi.edu/cas',
   service_url : 'http://localhost:8080'
 });
+
+// code to enable CORS for dev mode (serving angular via ng serve)
+const cors = require('cors'); //<-- required installing 'cors' (npm i cors --save)
+app.use(cors()); //<-- That`s it, no more code needed!
 
 // The following block of code grabs the events from the events.rpi.edu feed, and
 // pulls them as JSON format. A mongodb connection is established, and the events
@@ -65,7 +68,19 @@ app.get('/database/create', (req, response) => {
     })
   });
 });
-// ===============================================================
+// =============================================================================
+app.get('/events', (req, res) => {
+  MongoClient.connect(mongoUrl, { useNewUrlParser : true }, (err, db) => {
+    if (err) throw err;
+    var dbo = db.db('rpievents');
+    dbo.collection('events').find().toArray((err, data) => {
+      if (err) throw err;
+      // console.log(data);
+      res.send({status: 200, json: data});
+    });
+  });
+});
+
 
 
 // Unauthenticated clients will be redirected to the CAS login and then back to
