@@ -12,7 +12,7 @@ export class EventsPageComponent implements OnInit {
   constructor(private http: HttpClient) {
   }
 
-  events = [];
+  private events = [];
   test = 'hi there';
 
   ngOnInit() {
@@ -25,5 +25,7 @@ export class EventsPageComponent implements OnInit {
       this.events = data['json'];
     });
   }
+
+  
 
 }

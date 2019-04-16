@@ -1,13 +1,9 @@
 <h1> Upcoming Events! </h1>
 
-<!-- <ul>
-  <li *ngFor="let event of events">
-    {{event.summary}}
+<input [(ngModel)]="searchText" placedholder = 'search text goes here'>
+<ul>
+  ><li *ngFor = "let event of events | filter: searchText" style="border:1px black solid">
+    <h1>{{event.summary}}</h1>
+    <h2>{{event.description}}</h2>
   </li>
-  <p>{{test}}</p>
-</ul> -->
-
-<div *ngFor = "let event of events" style="border:1px black solid">
-  <h1>{{event.summary}}</h1>
-  <h2>{{event.description}}</h2>
-</div>
+</ul>
