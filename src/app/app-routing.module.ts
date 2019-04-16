@@ -10,7 +10,7 @@ import { DiscussionPageComponent } from './pages/discussion-page/discussion-page
 const routes: Routes = [
   { path: '', component: SplashPageComponent },
   { path: 'events', component: EventsPageComponent },
-  { path: 'discussion', component: DiscussionPageComponent },
+  { path: 'discussion/:id', component: DiscussionPageComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 
