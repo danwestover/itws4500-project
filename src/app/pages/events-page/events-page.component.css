@@ -1,0 +1,15 @@
+.top{
+	padding-top: 100px;
+}
+
+.card{
+	width: 95%;
+	margin-left: 2.5%;
+	padding: 1%;
+	margin-bottom: 4px;
+	z-index: -1;
+}
+
+.card h2{
+	font-size: 1.5em;
+}

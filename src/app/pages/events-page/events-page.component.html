@@ -1,4 +1,4 @@
-<h1> Upcoming Events! </h1>
+<h1 class="top"> Upcoming Events! </h1>
 
 <!-- <ul>
   <li *ngFor="let event of events">
@@ -7,7 +7,7 @@
   <p>{{test}}</p>
 </ul> -->
 
-<div *ngFor = "let event of events" style="border:1px black solid">
+<div class = "card" *ngFor = "let event of events" style="border:1px black solid">
   <h1>{{event.summary}}</h1>
   <h2>{{event.description}}</h2>
 </div>
