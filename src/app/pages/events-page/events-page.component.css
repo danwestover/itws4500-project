@@ -12,3 +12,7 @@
 .card h2{
 	font-size: 1.5em;
 }
+
+.fixFooter {
+	min-height: 100vh;
+}
