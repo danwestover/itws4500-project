@@ -3,3 +3,10 @@
   <h2>{{event.description}}</h2>
   <h3>{{event.formattedDate}}</h3>
 </div>
+
+<ul>
+  <li *ngFor="let comment of comments">{{comment.author}}
+    <br> {{comment.text}}
+    <br> {{comment.posted}}
+  </li>
+</ul>

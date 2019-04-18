@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRouter, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -14,10 +14,10 @@ export class DiscussionPageComponent implements OnInit {
   
   private eventid = this.route.snapshot.paramMap.get('id');
   private event;
+  private comments = [];
 
   ngOnInit() {
     this.getEvent();
-    this.testAuth();
   }
 
 
@@ -26,13 +26,9 @@ export class DiscussionPageComponent implements OnInit {
       console.log(data['json'][0]);
       this.event = data['json'][0];
     });
-  }
-
-  testAuth() {
-    this.http.get('http://localhost:3000/api/user').subscribe((data) => {
-      console.log(data);
+    this.http.get('http://localhost:3000/events/comments', {params: {eventid: this.eventid}}).subscribe((data) => {
+      console.log(data['json']);
+      this.comments = data['json'][0]['comments'];
     });
   }
-
-
 }

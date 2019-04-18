@@ -16,13 +16,17 @@
     </button> -->
 
     <div class="navbar">
-        <ul class="nav navbar-nav ml-auto">
+        <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
                 <a class="nav-link" routerLink="">Home</a>
             </li>
             <li class="nav-item">
                     <a class="nav-link" routerLink="events">Events</a>
             </li>
+
+            <li *ngIf="!auth.isLoggedIn()"><a routerLink="/login">Sign In</a></li>
+            <li *ngIf="auth.isLoggedIn()"><a routerLink="/profile">{{auth.getUserDetails()?.name}}</a></li>
+            <li *ngIf="auth.isLoggedIn()"><a (click)="auth.logout()">Logout</a></li>
         </ul>
     </div>
 

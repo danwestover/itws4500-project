@@ -6,11 +6,15 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { SplashPageComponent } from './pages/splash-page/splash-page.component';
 import { EventsPageComponent } from './pages/events-page/events-page.component';
 import { DiscussionPageComponent } from './pages/discussion-page/discussion-page.component';
+import { LoginComponent } from './modals/login/login.component';
+import { RegisterComponent } from './modals/register/register.component';
 
 const routes: Routes = [
   { path: '', component: SplashPageComponent },
   { path: 'events', component: EventsPageComponent },
   { path: 'discussion/:id', component: DiscussionPageComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent},
   { path: '**', component: PageNotFoundComponent }
 ];
 

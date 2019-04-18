@@ -13,6 +13,8 @@ import { DiscussionPageComponent } from './pages/discussion-page/discussion-page
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 import { FilterPipe } from './filter.pipe';
+import { RegisterComponent } from './modals/register/register.component';
+import { LoginComponent } from './modals/login/login.component';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { FilterPipe } from './filter.pipe';
     EventsPageComponent,
     DiscussionPageComponent,
     PageNotFoundComponent,
-    FilterPipe
+    FilterPipe,
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -33,6 +37,7 @@ import { FilterPipe } from './filter.pipe';
     FormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+
 })
 export class AppModule { }

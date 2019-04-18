@@ -1,31 +1,41 @@
 const http = require('http');
 const express = require('express');
-// const path = require('path');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const jwt = require('express-jwt');
+
+
+var auth = jwt({
+  secret: 'MY_SECRET',
+  userProperty: 'payload'
+});
+
+
+// require the Mongoose Database Model and Configs
+require('./models/db');
+require('./config/passport');
+var mgConf = require('./config.js');
+console.log(mgConf.mongoUrl);
 const app = express();
-var session = require('express-session');
-var CASAuthentication = require('cas-authentication');
+
+app.use(passport.initialize());
+
+
 const mongo = require("mongodb");
 const MongoClient = require('mongodb').MongoClient;
 
 const eventsUrl = 'http://events.rpi.edu:7070/feeder/main/eventsFeed.do?f=y&skinName=list-json&count=200';
-const mongoUrl = 'mongodb+srv://dbUser:UUvw0MzBK77rIb4N@cluster0-3htsp.mongodb.net/test?retryWrites=true'
 
-app.use(session({
-  secret            : 'super secret key',
-  resave            : false,
-  saveUninitialized : true
-}));
-
-// Create a new instance of CASAuthentication.
-var cas = new CASAuthentication({
-  cas_url     : 'https://cas-auth.rpi.edu/cas',
-  service_url : 'http://localhost:3000'
-});
+const User = mongoose.model("User");
 
 // code to enable CORS for dev mode (serving angular via ng serve)
 const cors = require('cors'); //<-- required installing 'cors' (npm i cors --save)
 app.use(cors()); //<-- That`s it, no more code needed!
 
+// =============================================================================
 // The following block of code grabs the events from the events.rpi.edu feed, and
 // pulls them as JSON format. A mongodb connection is established, and the events
 // are either skipped if they exist, or are inserted if they do not.
@@ -45,7 +55,7 @@ app.get('/database/create', (req, response) => {
 
       // mongodb connection is established, and events are either added or 
       // skipped.
-      MongoClient.connect(mongoUrl, { useNewUrlParser: true }, (err, db) => {
+      MongoClient.connect(mgConf.mongoUrl, { useNewUrlParser: true }, (err, db) => {
         if (err) throw err;
         var dbo = db.db('rpievents');
         dbo.collection('events').find().count((err, res) => {console.log(res);});
@@ -71,7 +81,7 @@ app.get('/database/create', (req, response) => {
 });
 // =============================================================================
 app.get('/events', (req, res) => {
-  MongoClient.connect(mongoUrl, { useNewUrlParser : true }, (err, db) => {
+  MongoClient.connect(mgConf.mongoUrl, { useNewUrlParser : true }, (err, db) => {
     if (err) throw err;
     var dbo = db.db('rpievents');
     dbo.collection('events').find().toArray((err, data) => {
@@ -85,7 +95,7 @@ app.get('/events', (req, res) => {
 
 app.get('/events/id', (req, res) => {
   // console.log(req.query.eventid);
-  MongoClient.connect(mongoUrl, { useNewUrlParser : true }, (err, db) => {
+  MongoClient.connect(mgConf.mongoUrl, { useNewUrlParser : true }, (err, db) => {
     if (err) throw err;
     var dbo = db.db('rpievents');
     dbo.collection('events').find({_id: mongo.ObjectId(req.query.eventid)}).toArray((err, data) => {
@@ -97,51 +107,57 @@ app.get('/events/id', (req, res) => {
   });
 });
 
-
-// Unauthenticated clients will be redirected to the CAS login and then back to
-// this route once authenticated.
-app.get( '/app', cas.bounce, function ( req, res ) {
-  res.send( '<html><body>Hello!</body></html>' );
+app.get('/events/comments', (req, res) => {
+  // console.log(req.query.eventid);
+  MongoClient.connect(mgConf.mongoUrl, { useNewUrlParser : true }, (err, db) => {
+    if (err) throw err;
+    var dbo = db.db('rpievents');
+    dbo.collection('discussion').find({event_id: mongo.ObjectId(req.query.eventid)}).toArray((err, data) => {
+      if (err) throw err;
+      // console.log(data);
+      res.send({status: 200, json: data});
+      db.close();
+    });
+  });
 });
 
-// Unauthenticated clients will receive a 401 Unauthorized response instead of
-// the JSON data.
-app.get( '/api', cas.block, function ( req, res ) {
-  res.json( { success: true } );
+app.post('/auth/register', (req, res) => {
+  var user = new User();
+
+  console.log(req.query);
+
+  user.name = req.query.name;
+  user.email = req.query.email;
+
+  console.log(req.query.password);
+
+  user.setPassword(req.query.password);
+
+  user.save((err) => {
+    res.status(200);
+    res.json({'token': user.generateJwt()});
+  });
 });
 
-// An example of accessing the CAS user session variable. This could be used to
-// retrieve your own local user records based on authenticated CAS username.
-app.get( '/api/user', cas.block, function ( req, res ) {
-  console.log({cas_info: req.session});
-  res.json( { cas_user: req.session[ cas.session_name ],
-              // cas_session: req.session[ cas.session_inf ] 
-          } );
+app.post('/auth/login', (req,res,next) => {
+  console.log('rcvd login request');
+  console.log(req);
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      res.status(404).json(err);
+      return;
+    }
+    if (user) {
+      res.status(200).json({"token": user.generateJwt()});
+    }
+    else {
+      res.status(401).json(info);
+    }
+  })(req,res,next);
 });
 
-// Unauthenticated clients will be redirected to the CAS login and then to the
-// provided "redirectTo" query parameter once authenticated.
-app.get( '/authenticate', cas.bounce, function(req, res) {
-  console.log(session);
-  res.redirect("http://localhost:4200");
-});
-
-// This route will de-authenticate the client with the Express server and then
-// redirect the client to the CAS logout page.
-app.get( '/logout', cas.logout );
-
-
-
-// Serve only the static files form the dist directory
-// app.use(express.static(__dirname + '/dist/itws4500project'));
-
-// app.get('/*', function (req, res) {
-    // res.sendFile(path.join(__dirname + '/dist/itws4500project/index.html'));
-// });
-
-// app.get('/', function(req,res) {
-//   res.send("<a href=/authenticate>Click here to login</a>");
-// });
 
 // Start the app by listening on the default Heroku port
 app.listen(process.env.PORT || 3000);
+
+// https://www.sitepoint.com/user-authentication-mean-stack/
