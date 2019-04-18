@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 var session = require('express-session');
 var CASAuthentication = require('cas-authentication');
+const mongo = require("mongodb");
 const MongoClient = require('mongodb').MongoClient;
 
 const eventsUrl = 'http://events.rpi.edu:7070/feeder/main/eventsFeed.do?f=y&skinName=list-json&count=200';
@@ -18,7 +19,7 @@ app.use(session({
 // Create a new instance of CASAuthentication.
 var cas = new CASAuthentication({
   cas_url     : 'https://cas-auth.rpi.edu/cas',
-  service_url : 'http://localhost:8080'
+  service_url : 'http://localhost:3000'
 });
 
 // code to enable CORS for dev mode (serving angular via ng serve)
@@ -77,10 +78,24 @@ app.get('/events', (req, res) => {
       if (err) throw err;
       // console.log(data);
       res.send({status: 200, json: data});
+      db.close();
     });
   });
 });
 
+app.get('/events/id', (req, res) => {
+  // console.log(req.query.eventid);
+  MongoClient.connect(mongoUrl, { useNewUrlParser : true }, (err, db) => {
+    if (err) throw err;
+    var dbo = db.db('rpievents');
+    dbo.collection('events').find({_id: mongo.ObjectId(req.query.eventid)}).toArray((err, data) => {
+      if (err) throw err;
+      // console.log(data);
+      res.send({status: 200, json: data});
+      db.close();
+    });
+  });
+});
 
 
 // Unauthenticated clients will be redirected to the CAS login and then back to
@@ -108,16 +123,14 @@ app.get( '/api/user', cas.block, function ( req, res ) {
 // provided "redirectTo" query parameter once authenticated.
 app.get( '/authenticate', cas.bounce, function(req, res) {
   console.log(session);
-  // console.log('--------------');
-  // console.log(res);
-  // console.log('--------------');
-  // res.send('<html><body>xx</body></html>');
-  res.redirect('/api/user');
+  res.redirect("http://localhost:4200");
 });
 
 // This route will de-authenticate the client with the Express server and then
 // redirect the client to the CAS logout page.
 app.get( '/logout', cas.logout );
+
+
 
 // Serve only the static files form the dist directory
 // app.use(express.static(__dirname + '/dist/itws4500project'));
