@@ -1,5 +1,10 @@
 .top{
-	padding-top: 100px;
+	padding-top: 10px;
+	text-align: center;
+}
+
+.search{
+	text-align: center;
 }
 
 .card{

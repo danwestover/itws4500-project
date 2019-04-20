@@ -1,6 +1,8 @@
 <div class="fixFooter">
   <h1 class="top"> Upcoming Events! </h1>
-  <label>Search: </label><input [(ngModel)]="searchText">
+  <div class="search">
+    <label>Search: </label><input [(ngModel)]="searchText">
+  </div>
   <ul>
     <li *ngFor = "let event of events | filter: searchText" 
     class="card" style="border:1px black solid">
