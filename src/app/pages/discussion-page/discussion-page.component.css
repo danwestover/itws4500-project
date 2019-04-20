@@ -1,0 +1,30 @@
+/*CSS for the comments*/
+
+ul{
+	list-style: none;
+}
+li{
+	margin-bottom: 4px;
+}
+
+.comment-box{
+	width: 95%;
+	min-height: 60px;
+	margin-right: 2.5%;
+	margin-left: 2.5%;
+}
+
+.comment{
+	margin: 0;
+}
+
+.c-author{
+	font-weight: bold;
+}
+.c-text{
+
+}
+.c-posted{
+	font-style: italic;
+	color: darkgrey;
+}
