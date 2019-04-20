@@ -28,3 +28,17 @@ li{
 	font-style: italic;
 	color: darkgrey;
 }
+
+.title {
+	text-align: center;
+}
+
+.description {
+	font-size: 24px;
+	font-weight: normal;
+}
+
+.date {
+	text-align: right;
+	color: darkred;
+}
