@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule} from '@angular/common/http';
-import { FormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -15,6 +16,8 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { FilterPipe } from './filter.pipe';
 import { RegisterComponent } from './modals/register/register.component';
 import { LoginComponent } from './modals/login/login.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { AddCommentModalComponent } from './pages/discussion-page/add-comment-modal/add-comment-modal.component';
 
 
 @NgModule({
@@ -28,16 +31,22 @@ import { LoginComponent } from './modals/login/login.component';
     PageNotFoundComponent,
     FilterPipe,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    ProfileComponent,
+    AddCommentModalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent],
-
+  entryComponents: [
+    AddCommentModalComponent
+  ]
 })
 export class AppModule { }

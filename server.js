@@ -56,20 +56,20 @@ app.get('/database/create', (req, response) => {
       // mongodb connection is established, and events are either added or 
       // skipped.
       MongoClient.connect(mgConf.mongoUrl, { useNewUrlParser: true }, (err, db) => {
-        if (err) throw err;
+        if (err) mongoErrHandler(dbo, err);
         var dbo = db.db('rpievents');
         dbo.collection('events').find().count((err, res) => {console.log(res);});
         for (let i = 0; i < eventsArr.length; i++) {
           // the 'eventlink' is the most unique feature of the events, since recurring events 
           // include their recurrance date (since the GUID field is not-unique for recurring events)
           dbo.collection('events').find({eventlink:eventsArr[i]['eventlink']}).count((err, count) => {
-            if (err) throw err;
+            if (err) mongoErrHandler(dbo, err);
             if (count > 0) {
               // console.log('Record with guid: ' + eventsArr[i]['guid'] + ' exists, skipping.')
             }
             else {
               dbo.collection('events').insertOne(eventsArr[i], (err, response) => {
-                if (err) throw err;
+                if (err) mongoErrHandler(dbo, err);
                 // console.log('Inserted event with guid: ' + eventsArr[i]['guid']);
               });
             }
@@ -82,10 +82,10 @@ app.get('/database/create', (req, response) => {
 // =============================================================================
 app.get('/events', (req, res) => {
   MongoClient.connect(mgConf.mongoUrl, { useNewUrlParser : true }, (err, db) => {
-    if (err) throw err;
+    if (err) mongoErrHandler(dbo, err);
     var dbo = db.db('rpievents');
     dbo.collection('events').find().toArray((err, data) => {
-      if (err) throw err;
+      if (err) mongoErrHandler(dbo, err);
       // console.log(data);
       res.send({status: 200, json: data});
       db.close();
@@ -96,10 +96,10 @@ app.get('/events', (req, res) => {
 app.get('/events/id', (req, res) => {
   // console.log(req.query.eventid);
   MongoClient.connect(mgConf.mongoUrl, { useNewUrlParser : true }, (err, db) => {
-    if (err) throw err;
+    if (err) mongoErrHandler(dbo, err);
     var dbo = db.db('rpievents');
     dbo.collection('events').find({_id: mongo.ObjectId(req.query.eventid)}).toArray((err, data) => {
-      if (err) throw err;
+      if (err) mongoErrHandler(dbo, err);
       // console.log(data);
       res.send({status: 200, json: data});
       db.close();
@@ -110,10 +110,10 @@ app.get('/events/id', (req, res) => {
 app.get('/events/comments', (req, res) => {
   // console.log(req.query.eventid);
   MongoClient.connect(mgConf.mongoUrl, { useNewUrlParser : true }, (err, db) => {
-    if (err) throw err;
+    if (err) mongoErrHandler(dbo, err);
     var dbo = db.db('rpievents');
     dbo.collection('discussion').find({event_id: mongo.ObjectId(req.query.eventid)}).toArray((err, data) => {
-      if (err) throw err;
+      if (err) mongoErrHandler(dbo, err);
       // console.log(data);
       res.send({status: 200, json: data});
       db.close();
@@ -140,8 +140,8 @@ app.post('/auth/register', (req, res) => {
 });
 
 app.post('/auth/login', (req,res,next) => {
-  console.log('rcvd login request');
-  console.log(req);
+  // console.log('rcvd login request');
+  // console.log(req);
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       res.status(404).json(err);
@@ -156,8 +156,36 @@ app.post('/auth/login', (req,res,next) => {
   })(req,res,next);
 });
 
+app.post('/comment', (req,res) => {
+  console.log(req.query);
+  MongoClient.connect(mgConf.mongoUrl, { useNewUrlParser : true }, (err, db) => {
+    if (err) mongoErrHandler(dbo, err);
+    const objEventId = mongo.ObjectID(req.query.eventid);
+    var dbo = db.db('rpievents');
+    dbo.collection('discussion').update(
+      { event_id: objEventId },
+      { $push: { comments: {
+        posted: new Date(),
+        author: req.query.author,
+        author_id: mongo.ObjectID(req.query.author_id),
+        text: req.query.commenttext
+        }
+      }},
+      {upsert: true}, (err, result) => {
+        if (err) mongoErrHandler(dbo, err);
+        console.log('comment: post successful');
+        db.close();
+        res.status(200).json({result: 'comment success'});
+      }); 
+  });
+});
 
-// Start the app by listening on the default Heroku port
+function mongoErrHandler(dbo, err) {
+  dbo.close();
+  throw err;
+}
+
+
 app.listen(process.env.PORT || 3000);
 
 // https://www.sitepoint.com/user-authentication-mean-stack/
