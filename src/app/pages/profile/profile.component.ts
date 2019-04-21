@@ -10,8 +10,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(private auth: AuthService) { }
 
-  public name;
-  public email;
+  public name: string;
+  public email: string;
 
   ngOnInit() {
     this.name = this.auth.getUserDetails().name;
