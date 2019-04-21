@@ -25,7 +25,7 @@ export class RegisterComponent {
     }, (err) => {
       console.error(err);
     });
-    console.log("Register submitted.");
+    console.log('Register submitted.');
   }
 
 }

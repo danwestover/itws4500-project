@@ -4,6 +4,10 @@
   <h3>{{event.formattedDate}}</h3>
 </div>
 
+<div>
+  <button *ngIf="auth.isLoggedIn()" class="btn btn-success" type="button" (click)="openCommentModal()">Add Comment</button>
+</div>
+
 <ul>
   <li *ngFor="let comment of comments">{{comment.author}}
     <br> {{comment.text}}
