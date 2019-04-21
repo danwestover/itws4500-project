@@ -130,3 +130,7 @@
     padding-bottom: 4rem;
   }
   
+  .mb-0, h2{
+    padding-right: 10px;
+    padding-left: 10px;
+  }

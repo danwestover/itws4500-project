@@ -1,7 +1,7 @@
 <div class="jumbotron">
-  <h1>{{event.summary}}</h1>
-  <h2>{{event.description}}</h2>
-  <h3>{{event.formattedDate}}</h3>
+  <h1 class="title">{{event.summary}}</h1>
+  <h2 class="description">{{event.description}}</h2>
+  <h3 class="date">{{event.formattedDate}}</h3>
 </div>
 
 <div>
@@ -9,8 +9,8 @@
 </div>
 
 <ul>
-  <li *ngFor="let comment of comments">{{comment.author}}
-    <br> {{comment.text}}
-    <br> {{comment.posted}}
+  <li *ngFor="let comment of comments"><p class="comment c-author">{{comment.author}}</p>
+     <p class="comment c-text">"{{comment.text}}"</p>
+     <p class="comment c-posted">Comment made {{comment.posted}}</p>
   </li>
 </ul>
