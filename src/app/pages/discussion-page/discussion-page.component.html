@@ -1,0 +1,16 @@
+<div class="jumbotron">
+  <h1 class="title">{{event.summary}}</h1>
+  <h2 class="description">{{event.description}}</h2>
+  <h3 class="date">{{event.formattedDate}}</h3>
+</div>
+
+<div>
+  <button *ngIf="auth.isLoggedIn()" class="btn btn-success" type="button" (click)="openCommentModal()">Add Comment</button>
+</div>
+
+<ul>
+  <li *ngFor="let comment of comments"><p class="comment c-author">{{comment.author}}</p>
+     <p class="comment c-text">"{{comment.text}}"</p>
+     <p class="comment c-posted">Comment made {{comment.posted.split('T')[0]}} {{comment.posted.split('T')[1].split('.')[0]}} GMT</p>
+  </li>
+</ul>

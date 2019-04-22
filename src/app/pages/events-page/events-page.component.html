@@ -1,0 +1,14 @@
+<div class="fixFooter">
+  <h1 class="top"> Upcoming Events! </h1>
+  <div class="search">
+    <label>Search: </label><input [(ngModel)]="searchText">
+  </div>
+  <ul>
+    <li *ngFor = "let event of events | filter: searchText" 
+    class="card" style="border:1px black solid">
+        <h1>{{event.summary}}</h1>
+        <h2>{{event.description}}</h2>
+        <a [routerLink]="[ '/discussion', event._id ]" class="btn btn-primary">Discuss this Event!</a>
+      </li>
+  </ul>
+</div>
