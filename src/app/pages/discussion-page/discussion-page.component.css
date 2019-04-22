@@ -7,12 +7,19 @@ li{
 	margin-bottom: 4px;
 }
 
+.btn{
+	margin-left: 39px;
+	margin-bottom: 5px;
+}
+
+
 .comment-box{
 	width: 95%;
 	min-height: 60px;
 	margin-right: 2.5%;
 	margin-left: 2.5%;
 }
+
 
 .comment{
 	margin: 0;
@@ -29,15 +36,14 @@ li{
 	color: darkgrey;
 }
 
+
 .title {
 	text-align: center;
 }
-
 .description {
 	font-size: 24px;
 	font-weight: normal;
 }
-
 .date {
 	text-align: right;
 	color: darkred;
