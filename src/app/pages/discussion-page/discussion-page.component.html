@@ -1,7 +1,7 @@
 <div class="jumbotron">
-  <h1 class="title">{{event.summary}}</h1>
-  <h2 class="description">{{event.description}}</h2>
-  <h3 class="date">{{event.formattedDate}}</h3>
+  <h1 class="title" [innerHtml]=event.summary></h1>
+  <h2 class="description" [innerHtml]=event.description></h2>
+  <h3 class="date" [innerHtml]=event.formattedDate></h3>
 </div>
 
 <div>
