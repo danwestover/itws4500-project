@@ -6,6 +6,7 @@
 
 
 .logout:hover {
+	color: #2C7DCE;
   	text-decoration: underline;
-
+  	background-color:rgba(0, 0, 0, 0.1);
 }
