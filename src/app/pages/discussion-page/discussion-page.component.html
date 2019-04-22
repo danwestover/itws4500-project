@@ -9,7 +9,7 @@
 </div>
 
 <ul>
-  <li *ngFor="let comment of comments"><p class="comment c-author">{{comment.author}}</p>
+  <li *ngFor="let comment of comments.reverse()"><p class="comment c-author">{{comment.author}}</p>
      <p class="comment c-text">"{{comment.text}}"</p>
      <p class="comment c-posted">Comment made {{comment.posted.split('T')[0]}} {{comment.posted.split('T')[1].split('.')[0]}} GMT</p>
   </li>
