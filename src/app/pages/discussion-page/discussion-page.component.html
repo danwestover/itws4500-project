@@ -6,6 +6,7 @@
 
 <div>
   <button *ngIf="auth.isLoggedIn()" class="btn btn-success" type="button" (click)="openCommentModal()">Add Comment</button>
+  <button *ngIf="!auth.isLoggedIn()" class="btn btn-success" type="button" routerLink="/login">Sign In to make a comment</button>
 </div>
 
 <ul>
