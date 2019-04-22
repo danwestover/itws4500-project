@@ -37,7 +37,6 @@ export class DiscussionPageComponent implements OnInit {
     this.http.get('http://localhost:3000/events/comments', {params: {eventid: this.eventid}}).subscribe((data) => {
       console.log(data['json']);
       this.comments = data['json'][0]['comments'];
-      console.log(this.comments);
     });
   }
 
@@ -51,7 +50,9 @@ export class DiscussionPageComponent implements OnInit {
       console.log(apiRes);
     });
     console.log(`posting: ${commentText} from ${this.auth.getUserDetails()._id} on ${this.eventid}`);
-    this.getEvent();
+    setTimeout(() => {
+      this.getEvent();
+    }, 100);
   }
 
   openCommentModal() {
