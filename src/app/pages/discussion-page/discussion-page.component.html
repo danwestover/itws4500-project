@@ -1,17 +1,27 @@
-<div class="jumbotron">
-  <h1 class="title" [innerHtml]=event.summary></h1>
-  <h2 class="description" [innerHtml]=event.description></h2>
-  <h3 class="date" [innerHtml]=event.formattedDate></h3>
+<div class="container" style="padding-top: 10px;">
+  <div class="row">
+    <div class="col-md">
+      <div class="jumbotron">
+        <h1 class="title" [innerHtml]=event.summary></h1>
+        <h2 class="description" [innerHtml]=event.description></h2>
+        <h3 class="date" [innerHtml]=event.formattedDate></h3>
+        <h4 class="location" [innerHtml]=event.location.address></h4>
+      </div>
+    </div>
+    <div class="col-md">
+      <div>
+        <button *ngIf="auth.isLoggedIn()" class="btn btn-success" type="button" (click)="openCommentModal()">Add Comment</button>
+        <button *ngIf="!auth.isLoggedIn()" class="btn btn-success" type="button" routerLink="/login">Sign In to make a comment</button>
+        <p *ngIf="comments.length === 0">Be the first to post a comment on this event!</p>
+      </div>
+      <div style="overflow:scroll">
+        <ul>
+          <li *ngFor="let comment of comments"><p class="comment c-author">{{comment.author}}</p>
+            <p class="comment c-text">"{{comment.text}}"</p>
+            <p class="comment c-posted">Comment made {{comment.posted.split('T')[0]}} {{comment.posted.split('T')[1].split('.')[0]}} GMT</p>
+          </li>
+        </ul>
+      </div>
+    </div>
 </div>
-
-<div>
-  <button *ngIf="auth.isLoggedIn()" class="btn btn-success" type="button" (click)="openCommentModal()">Add Comment</button>
-  <button *ngIf="!auth.isLoggedIn()" class="btn btn-success" type="button" routerLink="/login">Sign In to make a comment</button>
-</div>
-
-<ul>
-  <li *ngFor="let comment of comments.reverse()"><p class="comment c-author">{{comment.author}}</p>
-     <p class="comment c-text">"{{comment.text}}"</p>
-     <p class="comment c-posted">Comment made {{comment.posted.split('T')[0]}} {{comment.posted.split('T')[1].split('.')[0]}} GMT</p>
-  </li>
-</ul>
+</div> 

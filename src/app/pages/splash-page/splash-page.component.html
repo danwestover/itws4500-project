@@ -25,12 +25,12 @@
 					<h3 class="mb-5">This is a website for all RPI students!</h3>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" *ngIf="!this.auth.isLoggedIn()">
 				<div class="col-md-14 col-lg-12 col-xl-10 mx-auto">
 					<h5>Want to join the RPI Forum? Sign in now!</h5>
 				</div>
 			</div>
-			<div class="row" >
+			<div class="row" *ngIf="!this.auth.isLoggedIn()">
 				<div class="col-md-5 col-lg-3 col-xl-2 mx-auto">
 					<button routerLink="/login" type="submit" class="btn btn-block btn-lg btn-primary">Sign in!</button>
 			 	</div>
@@ -135,7 +135,7 @@
 	<!-- Call to Action -->
 	<section class="call-to-action text-white text-center">
 		<div class="overlay"></div>
-		<div class="container">
+		<div class="container" *ngIf="!this.auth.isLoggedIn()">
 			<div class="row">
 				<div class="col-xl-9 mx-auto">
 					<h2 class="mb-4">Want to get started? Register now!</h2>

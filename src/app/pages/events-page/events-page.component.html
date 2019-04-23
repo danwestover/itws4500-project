@@ -4,7 +4,7 @@
     <label>Search: </label><input [(ngModel)]="searchText">
   </div>
   <ul style="padding:0px;">
-    <li *ngFor = "let event of events | filter: searchText" 
+    <li *ngFor = "let event of currentEvents | filter: searchText" 
     class="card" style="border:1px black solid">
         <h1 [innerHtml]=event.summary></h1>
         <h2 [innerHtml]=event.description></h2>

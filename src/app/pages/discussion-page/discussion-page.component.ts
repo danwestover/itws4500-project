@@ -36,7 +36,7 @@ export class DiscussionPageComponent implements OnInit {
     });
     this.http.get('http://localhost:3000/events/comments', {params: {eventid: this.eventid}}).subscribe((data) => {
       console.log(data['json']);
-      this.comments = data['json'][0]['comments'];
+      this.comments = data['json'][0]['comments'].reverse();
     });
   }
 

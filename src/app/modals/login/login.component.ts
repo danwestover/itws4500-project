@@ -15,6 +15,8 @@ export class LoginComponent {
     password: ''
   };
 
+  public errorMsg: string;
+
   constructor(private auth: AuthService, private router: Router) { }
 
   login() {
@@ -22,6 +24,7 @@ export class LoginComponent {
       this.router.navigateByUrl('/profile');
     }, (err) => {
       console.error(err);
+      this.errorMsg = err.error.message;
     });
   }
 

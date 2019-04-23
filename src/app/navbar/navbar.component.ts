@@ -10,7 +10,14 @@ export class NavbarComponent implements OnInit {
 
   constructor(public auth: AuthService) { }
 
+  navbarOpen = false;
+
+
   ngOnInit() {
+  }
+
+  toggleNav() {
+    this.navbarOpen != this.navbarOpen;
   }
 
 }

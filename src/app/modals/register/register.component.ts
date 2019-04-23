@@ -24,6 +24,7 @@ export class RegisterComponent {
       this.router.navigateByUrl('/profile');
     }, (err) => {
       console.error(err);
+      alert('Registration Error: Please try again later.');
     });
     console.log('Register submitted.');
   }

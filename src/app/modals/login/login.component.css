@@ -5,3 +5,8 @@ form {
 button {
 	margin: 5px;
 }
+
+.errorMsg {
+	color:darkred;
+	font-style: italic;
+}
